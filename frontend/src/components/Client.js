@@ -65,15 +65,15 @@ const Client = () => {
     };
     return (
         <div className="container mt-5">
-            <header className="mb-4">
-                <h1><i className="fas fa-balance-scale"></i> Client Portal</h1>
+            <header className="mb-4 text-center">
+                <h1><i className="fas fa-balance-scale me-2"></i> Client Portal</h1>
             </header>
 
             <main>
                 {existingCase ? (
                     <div>
                         <h2>Your Existing Case:</h2>
-                        <table className="table">
+                        <table className="table table-hover shadow">
                             <thead>
                                 <tr>
                                     <th>Case Description</th>
