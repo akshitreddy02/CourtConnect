@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Client = () => {
@@ -8,7 +8,10 @@ const Client = () => {
     const { state } = useLocation();
     const clientid = state?.clientid;
     const lawyerid = state?.lawyerid;
-
+    const navigate = useNavigate();
+    const handleLogout = () => {
+        navigate('/');
+    };
     useEffect(() => {
         // Fetch existing case data when the component mounts
         const fetchExistingCase = async () => {
@@ -51,19 +54,26 @@ const Client = () => {
         }
     };
 
+    const handleDeleteExistingCase = async (caseId) => {
+        try {
+            await axios.delete(`http://localhost:3008/lawyer-cases/${caseId}`);
+            setExistingCase(null);
+            console.log('Existing case deleted successfully');
+        } catch (error) {
+            console.error('Error deleting existing case:', error);
+        }
+    };
     return (
-        <>
-            <header>
-                <h1>
-                    <i className="fas fa-balance-scale"></i> Client Portal
-                </h1>
+        <div className="container mt-5">
+            <header className="mb-4">
+                <h1><i className="fas fa-balance-scale"></i> Client Portal</h1>
             </header>
 
             <main>
                 {existingCase ? (
                     <div>
                         <h2>Your Existing Case:</h2>
-                        <table>
+                        <table className="table">
                             <thead>
                                 <tr>
                                     <th>Case Description</th>
@@ -82,18 +92,27 @@ const Client = () => {
                     </div>
                 ) : (
                     <form onSubmit={handleSubmit}>
-                        <label htmlFor="caseDescription">Case Description :</label>
-                        <textarea
-                            id="caseDescription"
-                            name="caseDescription"
-                            value={caseDescription}
-                            onChange={(e) => setCaseDescription(e.target.value)}
-                        />
-                        <button type="submit">Submit Case</button>
+                        <div className="mb-3">
+                            <label htmlFor="caseDescription" className="form-label">Case Description:</label>
+                            <textarea
+                                id="caseDescription"
+                                name="caseDescription"
+                                className="form-control"
+                                value={caseDescription}
+                                onChange={(e) => setCaseDescription(e.target.value)}
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-primary">Submit Case</button>
                     </form>
                 )}
+                {existingCase && existingCase.judgment !== null && (
+                    <button className="btn btn-warning mt-3" onClick={() => handleDeleteExistingCase(existingCase._id)}>
+                        New Case
+                    </button>
+                )}
+                <button className="btn btn-danger mt-3 mx-auto d-block" onClick={handleLogout}>Logout</button>
             </main>
-        </>
+        </div>
     );
 };
 

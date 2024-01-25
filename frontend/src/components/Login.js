@@ -45,46 +45,52 @@ const Login = () => {
         }
     };
     return (
-        <>
-            <div>
-                <div className="wrapper" id="hello">
-                    <div className="title">
-                        <span>Login Form</span>
+        <div className="container mt-5">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card">
+                        <div className="card-header">
+                            <h3 className="card-title text-center">Login Form</h3>
+                        </div>
+                        <div className="card-body">
+                            <form onSubmit={handleLoginSubmit}>
+                                <div className="mb-3">
+                                    <label htmlFor="username" className="form-label">Username</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="username"
+                                        placeholder="Enter your username"
+                                        required
+                                        value={username}
+                                        onChange={handleEmailChange}
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        id="password"
+                                        placeholder="Enter your password"
+                                        required
+                                        value={password}
+                                        onChange={handlePasswordChange}
+                                        autoComplete="current-password"
+                                    />
+                                </div>
+                                <div className="mb-3">
+                                    <a href="#" className="text-decoration-none">Forgot password?</a>
+                                </div>
+                                <div className="d-grid">
+                                    <button type="submit" className="btn btn-primary">Login</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                    <form onSubmit={handleLoginSubmit}>
-                        <div className="row">
-                            <i className="fas fa-user"></i>
-                            <input
-                                type="text"
-                                placeholder="username"
-                                required
-                                value={username}
-                                onChange={handleEmailChange}
-                            />
-                        </div>
-                        <div className="row">
-                            <i className="fas fa-lock"></i>
-                            <input
-                                type="password"
-                                placeholder="Password"
-                                required
-                                value={password}
-                                onChange={handlePasswordChange}
-                                autoComplete="current-password"
-                            />
-                        </div>
-                        <div id="pass">
-                            <a href="#" id="a">
-                                Forgot password?
-                            </a>
-                        </div>
-                        <div className="row button">
-                            <input type="submit" value="Login" />
-                        </div>
-                    </form>
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

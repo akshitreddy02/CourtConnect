@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Lawyer = () => {
     const [cases, setCases] = useState([]);
     const { state } = useLocation();
     const lawyerid = state?.lawyerid;
+    const navigate = useNavigate();
     const fetchCases = async () => {
         try {
             const response = await axios.get(`http://localhost:3008/lawyer-cases?lawyerid=${lawyerid}`);
@@ -19,7 +20,10 @@ const Lawyer = () => {
 
         fetchCases();
     }, []);
+    const handleLogout = () => {
+        navigate('/');
 
+    };
     const handleAccept = async (caseId) => {
         try {
             const response = await axios.patch(`http://localhost:3008/lawyer-cases/${caseId}`, {
@@ -48,10 +52,10 @@ const Lawyer = () => {
     };
 
     return (
-        <div>
-            <h1>Lawyer Portal</h1>
+        <div className="container mt-5">
+            <h1 className="mb-4">Lawyer Portal</h1>
             <h2>Case List</h2>
-            <table>
+            <table className="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>Case Description</th>
@@ -66,11 +70,21 @@ const Lawyer = () => {
                             <td>{caseItem.judgment || 'No Judgment'}</td>
                             <td>
                                 {caseItem.isaccepted ? (
-                                    'Accepted'
+                                    <span className="badge bg-success">Accepted</span>
                                 ) : (
                                     <>
-                                        <button onClick={() => handleAccept(caseItem._id)}>Accept</button>
-                                        <button onClick={() => handleDecline(caseItem._id)}>Decline</button>
+                                        <button
+                                            className="btn btn-success me-2"
+                                            onClick={() => handleAccept(caseItem._id)}
+                                        >
+                                            Accept
+                                        </button>
+                                        <button
+                                            className="btn btn-danger"
+                                            onClick={() => handleDecline(caseItem._id)}
+                                        >
+                                            Decline
+                                        </button>
                                     </>
                                 )}
                             </td>
@@ -78,6 +92,8 @@ const Lawyer = () => {
                     ))}
                 </tbody>
             </table>
+            <button className="btn btn-danger mt-3 mx-auto d-block" onClick={handleLogout}>Logout</button>
+
         </div>
     );
 };

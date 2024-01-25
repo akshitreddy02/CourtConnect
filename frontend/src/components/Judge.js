@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Judge = () => {
     const [acceptedCases, setAcceptedCases] = useState([]);
     const [judgmentInput, setJudgmentInput] = useState('');
-
+    const navigate = useNavigate();
     const fetchAcceptedCases = async () => {
         try {
             const response = await axios.get('http://localhost:3008/accepted-cases');
@@ -17,6 +18,11 @@ const Judge = () => {
 
         fetchAcceptedCases();
     }, []);
+
+    const handleLogout = () => {
+        navigate('/');
+
+    };
 
     const handleJudgmentSubmit = async (caseId) => {
         try {
@@ -37,10 +43,10 @@ const Judge = () => {
     };
 
     return (
-        <div>
+        <div className="container mt-5">
             <h1>Judge Portal</h1>
             <h2>Accepted Cases</h2>
-            <table>
+            <table className="table table-striped mt-3">
                 <thead>
                     <tr>
                         <th>Case Description</th>
@@ -55,9 +61,12 @@ const Judge = () => {
                             <td>{caseItem.judgment || 'No Judgment'}</td>
                             <td>
                                 {caseItem.judgment ? (
-                                    'Done'
+                                    <span className="badge bg-success">Done</span>
                                 ) : (
-                                    <button onClick={() => handleJudgmentSubmit(caseItem._id)}>
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => handleJudgmentSubmit(caseItem._id)}
+                                    >
                                         Submit Judgment
                                     </button>
                                 )}
@@ -66,16 +75,18 @@ const Judge = () => {
                     ))}
                 </tbody>
             </table>
-
             {/* Input field for judgment */}
-            <div>
-                <label htmlFor="judgmentInput">Enter Judgment:</label>
+            <div className="mt-3">
+                <label htmlFor="judgmentInput" className="form-label">Enter Judgment:</label>
                 <textarea
                     id="judgmentInput"
+                    className="form-control"
                     value={judgmentInput}
                     onChange={(e) => setJudgmentInput(e.target.value)}
                 />
             </div>
+            <button className="btn btn-danger mt-3 mx-auto d-block" onClick={handleLogout}>Logout</button>
+
         </div>
     );
 };
