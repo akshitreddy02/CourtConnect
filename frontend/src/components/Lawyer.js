@@ -50,13 +50,8 @@ const Lawyer = () => {
 
     const handleEditDescription = async (caseId, editedDescription) => {
         try {
-            setEditedDescriptions(prevState => ({
-                ...prevState,
-                [caseId]: editedDescription
-            }));
-
             const response = await axios.patch(`http://localhost:3008/lawyer-cases/edit/${caseId}`, {
-                $set: { caseDescription: editedDescription },
+                caseDescription: editedDescription,
             });
             console.log('Case description edited successfully:', response.data);
             fetchCases();
@@ -64,6 +59,7 @@ const Lawyer = () => {
             console.error('Error editing case description:', error);
         }
     };
+
 
     return (
         <div className="container mt-5">

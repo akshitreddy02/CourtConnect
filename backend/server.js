@@ -61,19 +61,23 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
 app.patch('/lawyer-cases/edit/:id', async (req, res) => {
     const { id } = req.params;
     const { caseDescription } = req.body;
 
     try {
-        const updatedCase = await cases.findByIdAndUpdate(id, { caseDescription }, { new: true });
+        const updatedCase = await cases.findByIdAndUpdate(
+            id,
+            { $set: { caseDescription } },
+            { new: true }
+        );
         res.json(updatedCase);
     } catch (error) {
         console.error('Error updating case description:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 
 
