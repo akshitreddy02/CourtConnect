@@ -4,9 +4,11 @@ import axios from 'axios';
 
 const Lawyer = () => {
     const [cases, setCases] = useState([]);
+    const [editedDescriptions, setEditedDescriptions] = useState({});
     const { state } = useLocation();
     const lawyerid = state?.lawyerid;
     const navigate = useNavigate();
+
     const fetchCases = async () => {
         try {
             const response = await axios.get(`http://localhost:3008/lawyer-cases?lawyerid=${lawyerid}`);
@@ -15,21 +17,20 @@ const Lawyer = () => {
             console.error('Error fetching cases:', error);
         }
     };
-    useEffect(() => {
-        // Fetch cases associated with the lawyer when the component mounts
 
+    useEffect(() => {
         fetchCases();
     }, []);
+
     const handleLogout = () => {
         navigate('/');
-
     };
+
     const handleAccept = async (caseId) => {
         try {
             const response = await axios.patch(`http://localhost:3008/lawyer-cases/${caseId}`, {
                 isaccepted: true,
             });
-            // Update the UI or perform any other actions based on the response
             console.log('Case accepted:', response.data);
             fetchCases();
         } catch (error) {
@@ -40,14 +41,27 @@ const Lawyer = () => {
     const handleDecline = async (caseId) => {
         try {
             await axios.delete(`http://localhost:3008/lawyer-cases/${caseId}`);
-            // Update the UI or perform any other actions after deleting the case
             console.log('Case declined and deleted successfully');
-            // Optionally, refetch the cases to update the list
-            // const updatedCases = cases.filter((c) => c._id !== caseId);
-            // setCases(updatedCases);
             fetchCases();
         } catch (error) {
             console.error('Error declining case:', error);
+        }
+    };
+
+    const handleEditDescription = async (caseId, editedDescription) => {
+        try {
+            setEditedDescriptions(prevState => ({
+                ...prevState,
+                [caseId]: editedDescription
+            }));
+
+            const response = await axios.patch(`http://localhost:3008/lawyer-cases/edit/${caseId}`, {
+                $set: { caseDescription: editedDescription },
+            });
+            console.log('Case description edited successfully:', response.data);
+            fetchCases();
+        } catch (error) {
+            console.error('Error editing case description:', error);
         }
     };
 
@@ -66,7 +80,33 @@ const Lawyer = () => {
                 <tbody>
                     {cases.map((caseItem) => (
                         <tr key={caseItem._id}>
-                            <td>{caseItem.caseDescription}</td>
+                            <td>
+                                {caseItem.isaccepted ? (
+                                    caseItem.caseDescription
+                                ) : (
+                                    <>
+                                        <div className="mb-2">
+                                            <strong>Original Description:</strong> {caseItem.caseDescription}
+                                        </div>
+                                        <div className="mb-2">
+                                            <label htmlFor={`editDescription-${caseItem._id}`} className="form-label">Edit Description:</label>
+                                            <input
+                                                id={`editDescription-${caseItem._id}`}
+                                                className="form-control"
+                                                type="text"
+                                                value={editedDescriptions[caseItem._id] || caseItem.caseDescription}
+                                                onChange={(e) => handleEditDescription(caseItem._id, e.target.value)}
+                                            />
+                                        </div>
+                                        <button
+                                            className="btn btn-primary me-2"
+                                            onClick={() => handleEditDescription(caseItem._id, editedDescriptions[caseItem._id] || caseItem.caseDescription)}
+                                        >
+                                            Submit Edit
+                                        </button>
+                                    </>
+                                )}
+                            </td>
                             <td>{caseItem.judgment || 'No Judgment'}</td>
                             <td>
                                 {caseItem.isaccepted ? (
@@ -93,7 +133,6 @@ const Lawyer = () => {
                 </tbody>
             </table>
             <button className="btn btn-danger mt-3 mx-auto d-block" onClick={handleLogout}>Logout</button>
-
         </div>
     );
 };

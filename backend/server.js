@@ -60,6 +60,23 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+app.patch('/lawyer-cases/edit/:id', async (req, res) => {
+    const { id } = req.params;
+    const { caseDescription } = req.body;
+
+    try {
+        const updatedCase = await cases.findByIdAndUpdate(id, { caseDescription }, { new: true });
+        res.json(updatedCase);
+    } catch (error) {
+        console.error('Error updating case description:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
 app.post('/cases', async (req, res) => {
     const { caseDescription, clientid, lawyerid } = req.body;
 
@@ -78,6 +95,29 @@ app.post('/cases', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
+
+
+app.get('/lawyers', async (req, res) => {
+    try {
+        const lawyerList = await login.find({ role: 'lawyer' }, 'lawyerid username');
+        res.json(lawyerList);
+    } catch (error) {
+        console.error('Error fetching lawyers:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+
+
+
+
+
+
 
 app.get('/cases', async (req, res) => {
     const { clientid } = req.query;

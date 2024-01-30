@@ -5,13 +5,17 @@ import axios from 'axios';
 const Client = () => {
     const [caseDescription, setCaseDescription] = useState('');
     const [existingCase, setExistingCase] = useState(null);
+    const [lawyers, setLawyers] = useState([]);
+    const [selectedLawyerId, setSelectedLawyerId] = useState(null);
+
     const { state } = useLocation();
     const clientid = state?.clientid;
-    const lawyerid = state?.lawyerid;
     const navigate = useNavigate();
+
     const handleLogout = () => {
         navigate('/');
     };
+
     useEffect(() => {
         // Fetch existing case data when the component mounts
         const fetchExistingCase = async () => {
@@ -24,11 +28,28 @@ const Client = () => {
             }
         };
 
+        // Fetch the list of lawyers when the component mounts
+        const fetchLawyers = async () => {
+            try {
+                const response = await axios.get('http://localhost:3008/lawyers');
+                setLawyers(response.data);
+            } catch (error) {
+                console.error('Error fetching lawyers:', error);
+            }
+        };
+
         fetchExistingCase();
-    }, [clientid, lawyerid]);
+        fetchLawyers();
+    }, [clientid]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if a lawyer is selected
+        if (!selectedLawyerId) {
+            console.log('Please select a lawyer');
+            return;
+        }
 
         // Check if the client already has a booked case
         if (existingCase) {
@@ -40,7 +61,7 @@ const Client = () => {
                 const response = await axios.post('http://localhost:3008/cases', {
                     caseDescription,
                     clientid,
-                    lawyerid,
+                    lawyerid: selectedLawyerId,
                 });
                 // Process the response or update the UI as needed
                 console.log('Response:', response.data);
@@ -63,6 +84,7 @@ const Client = () => {
             console.error('Error deleting existing case:', error);
         }
     };
+
     return (
         <div className="container mt-5">
             <header className="mb-4 text-center">
@@ -101,6 +123,24 @@ const Client = () => {
                                 value={caseDescription}
                                 onChange={(e) => setCaseDescription(e.target.value)}
                             />
+                        </div>
+                        {/* Add dropdown to select a lawyer */}
+                        <div className="mb-3">
+                            <label htmlFor="lawyer" className="form-label">Select a Lawyer:</label>
+                            <select
+                                id="lawyer"
+                                name="lawyer"
+                                className="form-select"
+                                value={selectedLawyerId}
+                                onChange={(e) => setSelectedLawyerId(e.target.value)}
+                            >
+                                <option value="">Select a Lawyer</option>
+                                {lawyers.map((lawyer) => (
+                                    <option key={lawyer.lawyerid} value={lawyer.lawyerid}>
+                                        {lawyer.username}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                         <button type="submit" className="btn btn-primary">Submit Case</button>
                     </form>
