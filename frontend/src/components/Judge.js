@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGavel } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import '../App.css';
 
@@ -26,6 +28,10 @@ const Judge = () => {
     };
 
     const handleJudgmentSubmit = async (caseId) => {
+        if (judgmentInput.trim() === '') {
+            alert('Please enter the judgement')
+            return;
+        }
         try {
             await axios.patch(`http://localhost:3008/accepted-cases/${caseId}`, {
                 judgment: judgmentInput,
@@ -44,9 +50,11 @@ const Judge = () => {
     };
 
     return (
-        <div className="container mt-5">
-            <h1>Judge Portal</h1>
-            <h2>Accepted Cases</h2>
+        <div className="container mt-5 text-center">
+            <h1 className='display-4 fw-bold'>
+                <FontAwesomeIcon icon={faGavel} className="me-2" />
+                Judge Portal</h1>
+            <h2>Case List</h2>
             <table className="table table-striped mt-3">
                 <thead>
                     <tr>

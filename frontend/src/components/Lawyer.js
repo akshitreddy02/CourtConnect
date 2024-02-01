@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBalanceScale } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import '../App.css';
 
@@ -63,8 +65,10 @@ const Lawyer = () => {
 
 
     return (
-        <div className="container mt-5">
-            <h1 className="mb-4">Lawyer Portal</h1>
+        <div className="container mt-5 text-center">
+            <h1 className="display-4 fw-bold mb-4">
+                <FontAwesomeIcon icon={faBalanceScale} className="me-2" />
+                Lawyer Portal</h1>
             <h2>Case List</h2>
             <table className="table table-striped mt-3">
                 <thead>

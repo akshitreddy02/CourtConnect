@@ -127,7 +127,7 @@ app.get('/cases', async (req, res) => {
     const { clientid } = req.query;
 
     try {
-        const existingCase = await cases.findOne({ clientid });
+        const existingCase = await cases.find({ clientid });
         res.json(existingCase);
     } catch (error) {
         console.error('Error fetching existing case:', error);
