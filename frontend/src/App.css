@@ -1,0 +1,10 @@
+.limg{
+  background-image: url('./images/login.jpg');
+}
+body{
+  display:initial;
+  background-image: url('./images/rem.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
