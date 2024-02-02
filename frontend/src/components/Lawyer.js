@@ -75,6 +75,7 @@ const Lawyer = () => {
                     <tr>
                         <th>Case Name</th>
                         <th>Case Description</th>
+                        <th>Document</th>
                         <th>Judgment</th>
                         <th>Actions</th>
                     </tr>
@@ -110,6 +111,7 @@ const Lawyer = () => {
                                     </>
                                 )}
                             </td>
+                            <td><a href={"http://localhost:3008/files/" + caseItem.clientid}>{caseItem.filename}</a></td>
                             <td>{caseItem.judgment || 'No Judgment'}</td>
                             <td>
                                 {caseItem.isaccepted ? (

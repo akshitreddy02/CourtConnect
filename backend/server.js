@@ -4,6 +4,11 @@ import bodyParser from 'body-parser';
 import cors from 'cors'
 const app = express();
 const PORT = 3008;
+
+import multer from 'multer';
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 app.use(cors());
 app.use(bodyParser.json());
 
@@ -31,7 +36,12 @@ const dataschema = new mongoose.Schema({
     judgment: {
         type: String,
         default: null
-    }
+    },
+    file: {
+        data: Buffer,
+        contentType: String
+    },
+    filename: String
 });
 
 const login = mongoose.model('login', userSchema);
@@ -79,8 +89,8 @@ app.patch('/lawyer-cases/edit/:id', async (req, res) => {
 
 
 
-app.post('/cases', async (req, res) => {
-    const { caseName, caseDescription, clientid, lawyerid } = req.body;
+app.post('/cases', upload.single('file'), async (req, res) => {
+    const { caseName, caseDescription, clientid, lawyerid, filename } = req.body;
 
     try {
         const newCase = new cases({
@@ -88,8 +98,12 @@ app.post('/cases', async (req, res) => {
             caseDescription,
             caseName,
             clientid,
-            lawyerid
-            // other fields with default values will be set automatically
+            lawyerid,
+            file: {
+                data: req.file.buffer,
+                contentType: req.file.mimetype
+            },
+            filename
         });
 
         const savedCase = await newCase.save();
@@ -117,7 +131,31 @@ app.get('/lawyers', async (req, res) => {
 
 
 
+app.get('/files/:clientid', async (req, res) => {
+    const { clientid } = req.params;
 
+    try {
+        const caseData = await cases.findOne({ clientid });
+
+        console.log(caseData)
+
+        if (!caseData || !caseData.file) {
+            return res.status(404).json({ error: 'File not found' });
+        }
+
+        console.log(caseData.file)
+        res.writeHead(200, {
+            'Content-Type': caseData.file.contentType,
+            'Content-Disposition': `attachment; filename="${caseData.filename}"`,
+        });
+
+
+        res.end(caseData.file.data);
+    } catch (error) {
+        console.error('Error fetching file:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 
 

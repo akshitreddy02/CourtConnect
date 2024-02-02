@@ -10,7 +10,7 @@ const Client = () => {
     const [lawyers, setLawyers] = useState([]);
     const [caseName, setCaseName] = useState('');
     const [selectedLawyerId, setSelectedLawyerId] = useState('');
-
+    const [file, setFile] = useState(null);
     const { state } = useLocation();
     const clientid = state?.clientid;
     const navigate = useNavigate();
@@ -44,20 +44,26 @@ const Client = () => {
             alert('Please enter the case description');
             return;
         }
-        if (caseDescription.trim() === '') {
-            alert('Please enter the case description');
+        if (caseName.trim() === '') {
+            alert('Please enter the case name');
             return;
         }
 
-        // Handle form submission, e.g., make an API request
+        const formData = new FormData();
+        console.log(file)
+        formData.append('file', file);
+        formData.append('caseName', caseName);
+        formData.append('caseDescription', caseDescription);
+        formData.append('clientid', clientid);
+        formData.append('lawyerid', selectedLawyerId);
+        formData.append('filename', file.name);
+
         try {
-            const response = await axios.post('http://localhost:3008/cases', {
-                caseName,
-                caseDescription,
-                clientid,
-                lawyerid: selectedLawyerId,
+            const response = await axios.post('http://localhost:3008/cases', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
-            // Process the response or update the UI as needed
             console.log('Response:', response.data);
             // After submitting a new case, update the existingCase state
             // setExistingCases(response.data);
@@ -66,6 +72,7 @@ const Client = () => {
             console.error('Error:', error);
         }
         fetchExistingCase();
+
 
     };
 
@@ -76,6 +83,7 @@ const Client = () => {
         const fetchLawyers = async () => {
             try {
                 const response = await axios.get('http://localhost:3008/lawyers');
+                console.log(response.data)
                 setLawyers(response.data);
             } catch (error) {
                 console.error('Error fetching lawyers:', error);
@@ -86,6 +94,11 @@ const Client = () => {
         fetchLawyers();
     }, []);
 
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+    };
 
     const handleNewCase = () => {
         // Reset the input fields
@@ -125,6 +138,17 @@ const Client = () => {
                             onChange={(e) => setCaseDescription(e.target.value)}
                         />
                     </div>
+                    {/* File input for uploading documents */}
+                    <div className="mb-3">
+                        <label htmlFor="file" className="form-label">Upload Document:</label>
+                        <input
+                            type="file"
+                            id="file"
+                            name="file"
+                            className="form-control"
+                            onChange={(e) => handleFileChange(e)}
+                        />
+                    </div>
                     {/* Add dropdown to select a lawyer */}
                     <div className="mb-3">
                         <label htmlFor="lawyer" className="form-label">Select a Lawyer:</label>
@@ -143,6 +167,7 @@ const Client = () => {
                             ))}
                         </select>
                     </div>
+
                     <button type="submit" className="btn btn-primary me-2">Submit Case</button>
                 </form>
                 <button type="submit" className="btn btn-primary" onClick={handleNewCase}>New case</button>
@@ -155,6 +180,7 @@ const Client = () => {
                                     <th>Case Name</th>
                                     <th>Case Description</th>
                                     <th>Judgment</th>
+                                    <th>Media</th>
                                     {/* Add other table headers for existing case data */}
                                 </tr>
                             </thead>
@@ -164,6 +190,7 @@ const Client = () => {
                                         <td>{existingCase.caseName}</td>
                                         <td>{existingCase.caseDescription}</td>
                                         <td>{existingCase.judgment || 'No Judgment'}</td>
+                                        <td><a href={"http://localhost:3008/files/" + existingCase.clientid}>{existingCase.filename}</a></td>
                                         {/* Add other table cells for existing case data */}
                                     </tr>
                                 ))}

@@ -60,6 +60,7 @@ const Judge = () => {
                     <tr>
                         <th>Case Name</th>
                         <th>Case Description</th>
+                        <th>Document</th>
                         <th>Judgment</th>
                         <th>Action</th>
                     </tr>
@@ -69,6 +70,7 @@ const Judge = () => {
                         <tr key={caseItem._id}>
                             <td>{caseItem.caseName}</td>
                             <td>{caseItem.caseDescription}</td>
+                            <td><a href={"http://localhost:3008/files/" + caseItem.clientid}>{caseItem.filename}</a></td>
                             <td>{caseItem.judgment || 'No Judgment'}</td>
                             <td>
                                 {caseItem.judgment ? (
