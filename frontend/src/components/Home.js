@@ -77,6 +77,7 @@ const Home = () => {
             </div>
 
             <div className="ankle">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis recusandae tempore repudiandae. Vero dolore deserunt dolorem, accusamus repellat facere cum nihil quisquam placeat laudantium. Id debitis voluptatibus dolore laudantium natus ex repellendus blanditiis quo, aperiam libero eos numquam quam recusandae, inventore molestias repellat culpa itaque explicabo aut incidunt autem excepturi vel quis at. Sit mollitia voluptas tenetur, itaque necessitatibus unde quam aut molestias facere autem adipisci placeat velit explicabo quisquam ut, illum labore qui obcaecati quasi provident! Doloribus quisquam quibusdam repellendus! Rem aspernatur officia, labore ab ipsam odit impedit reprehenderit sequi ipsum culpa dicta minima voluptatibus, obcaecati nesciunt ex corrupti.</p>
                 <h4>Contact us at: evault123@gmail.com</h4>
             </div>
         </div>
