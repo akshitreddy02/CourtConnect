@@ -24,6 +24,10 @@ const Login = () => {
             });
 
             const data = await response.json();
+            if (response.status === 401) {
+                alert('Incorrect password. Please try again.');
+                return;
+            }
             console.log('Data:', data);
 
             const role = data.user.role;
@@ -83,6 +87,11 @@ const Login = () => {
                                 <div className="d-grid">
                                     <button type="submit" className="btn btn-primary">Login</button>
                                 </div>
+
+                                <div className="mt-3 text-center">
+                                    <a href="/" className="text-decoration-none">Home</a>
+                                </div>
+
                             </form>
                         </div>
                     </div>

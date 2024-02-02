@@ -16,7 +16,7 @@ const Client = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        navigate('/');
+        navigate('/login');
     };
     const fetchExistingCase = async () => {
         try {
@@ -94,21 +94,6 @@ const Client = () => {
         setSelectedLawyerId('');
     };
 
-
-
-
-
-
-    // const handleDeleteExistingCase = async (caseId) => {
-    //     try {
-    //         await axios.delete(`http://localhost:3008/lawyer-cases/${caseId}`);
-    //         setExistingCase(null);
-    //         console.log('Existing case deleted successfully');
-    //     } catch (error) {
-    //         console.error('Error deleting existing case:', error);
-    //     }
-    // };
-
     return (
         <div className="container mt-5 text-center">
             <header className="mb-4">
@@ -159,8 +144,8 @@ const Client = () => {
                         </select>
                     </div>
                     <button type="submit" className="btn btn-primary me-2">Submit Case</button>
-                    <button type="submit" className="btn btn-primary" onClick={handleNewCase}>New case</button>
                 </form>
+                <button type="submit" className="btn btn-primary" onClick={handleNewCase}>New case</button>
                 {existingCases && existingCases.length > 0 ? (
                     <div>
                         <h2>Your Existing Cases:</h2>

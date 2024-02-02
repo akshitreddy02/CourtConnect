@@ -26,7 +26,7 @@ const Lawyer = () => {
     }, []);
 
     const handleLogout = () => {
-        navigate('/');
+        navigate('/login');
     };
 
     const handleAccept = async (caseId) => {

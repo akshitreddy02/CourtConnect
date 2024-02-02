@@ -23,7 +23,7 @@ const Judge = () => {
     }, []);
 
     const handleLogout = () => {
-        navigate('/');
+        navigate('/login');
 
     };
 

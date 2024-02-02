@@ -8,3 +8,109 @@ body{
   background-size: cover;
 
 }
+
+
+
+
+/* HOME PAGE CSS */
+
+.complete {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #949494; /* Light Grey */
+  color: #333;
+  text-align: center;
+}
+
+.heading {
+  background-color: #333;
+  color: #ffffff;
+  padding: 50px 0;
+  margin-bottom: 20px;
+}
+
+.mains-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.cardy {
+  flex: 0 0 calc(33.33% - 40px);
+  background-color: #fff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin: 20px;
+  transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+  overflow: hidden;
+  position: relative;
+}
+
+.cardy:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.2);
+  background-color: #f5f5f5;
+}
+
+.cardy:nth-child(odd) {
+  background-color: #ffcc80; /* Light Orange */
+}
+
+.cardy:nth-child(2n) {
+  background-color: #b2ebf2; /* Light Blue */
+}
+
+.cardy:nth-child(3n) {
+  background-color: #c8e6c9; /* Light Green */
+}
+
+.cardy:nth-child(4n) {
+  background-color: #e894c5; /* Light Yellow */
+}
+
+.cardy:nth-child(5n) {
+  background-color: #e0b3ff; /* Light Purple */
+}
+
+.main-heading {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #4a90e2;
+}
+.third {
+  color: #a9c6e8;
+}
+
+.para {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.clicker {
+  display: inline-block;
+  /* padding: 15px 30px; */
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  /* color: #da0d0d; */
+  /* background-color: #22e009; */
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  margin-top: 20px; 
+}
+
+.clicker:hover {
+  background-color: #357bd8;
+}
+
+.ankle {
+  background-color: #333;
+  color: #ffffff;
+  padding: 20px;
+  width: 100%;
+  margin-top: 20px;
+}
